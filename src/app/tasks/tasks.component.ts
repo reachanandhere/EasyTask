@@ -2,6 +2,7 @@ import { Component, Input } from '@angular/core';
 import { TaskComponent } from './task/task.component';
 import { NgFor } from '@angular/common';
 import { NewTaskComponent } from './new-task/new-task.component';
+import { newTaskData } from './task/task.model';
 
 @Component({
   selector: 'app-tasks',
@@ -63,4 +64,16 @@ export class TasksComponent {
   onCloseDialog(){
     this.isAddingTask = false;
   }
+
+  onTaskAdd(taskData: newTaskData) {
+    this.tasks.push({
+      id: Math.random().toString(),
+      userId: this.id,
+      title: taskData.title,
+      summary: taskData.summary,
+      dueDate: taskData.dueDate,
+    });
+    this.isAddingTask = false;
+  }
+
 }
