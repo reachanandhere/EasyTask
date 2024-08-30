@@ -1,23 +1,23 @@
-import { Component } from '@angular/core';
-
-import { DUMMY_USERS } from '../dummy-users';
+import { Component, EventEmitter, Input, Output, output } from '@angular/core';
 
 @Component({
   selector: 'app-user',
   standalone: true,
-  
+
   templateUrl: './user.component.html',
-  styleUrl: './user.component.css'
+  styleUrl: './user.component.css',
 })
 export class UserComponent {
-   selectedUser = DUMMY_USERS[0];
+  @Input() id!: string;
+  @Input({ required: true }) avatar!: string;
+  @Input({ required: true }) name!: string;
+  @Output() select = new EventEmitter<string>();
+  
+  get imagePath() {
+    return `assets/users/${this.avatar}`;
+  }
 
-   get imagePath(){
-    return `assets/users/${this.selectedUser.avatar}`;
-   }
-
-   onSelectUser(){
-    this.selectedUser = DUMMY_USERS[Math.random() * DUMMY_USERS.length | 0];
-   }
-
+  onSelectUser() {
+    this.select.emit(this.id);
+  }
 }
