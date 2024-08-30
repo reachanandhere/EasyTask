@@ -66,7 +66,7 @@ export class TasksComponent {
   }
 
   onTaskAdd(taskData: newTaskData) {
-    this.tasks.push({
+    this.tasks.unshift({
       id: Math.random().toString(),
       userId: this.id,
       title: taskData.title,
