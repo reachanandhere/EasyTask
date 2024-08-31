@@ -1,6 +1,7 @@
-import { Component, EventEmitter, Output } from '@angular/core';
+import { Component, EventEmitter, Input, Output, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { newTaskData } from '../task/task.model';
+import { TasksService } from '../tasks.service';
 
 @Component({
   selector: 'app-new-task',
@@ -11,10 +12,13 @@ import { newTaskData } from '../task/task.model';
 })
 export class NewTaskComponent {
   @Output() closeDialog = new EventEmitter<boolean>();
-  @Output() addTask = new EventEmitter<newTaskData>();
+
+  @Input({ required: true }) userId!: string;
   enteredTitle = '';
   enteredSummary = '';
   enteredDueDate = '';
+
+  private tasksService = inject(TasksService);
 
   onCloseDialog() {
     this.closeDialog.emit(true);
@@ -22,11 +26,15 @@ export class NewTaskComponent {
 
   onSubmit() {
     if (this.enteredTitle && this.enteredSummary && this.enteredDueDate) {
-      this.addTask.emit({
-        title: this.enteredTitle,
-        summary: this.enteredSummary,
-        dueDate: this.enteredDueDate,
-      });
+      this.tasksService.addTask(
+        {
+          title: this.enteredTitle,
+          summary: this.enteredSummary,
+          dueDate: this.enteredDueDate,
+        },
+        this.userId
+      );
     }
+    this.closeDialog.emit(true);
   }
 }
